@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+  frontend:
+    build:
+      context: ./my-frontend
+      args:
+        - NODE_ENV=development
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./my-frontend:/app
+      - /app/node_modules
+    environment:
+      - REACT_APP_API_URL=http://localhost:5000
+      - WATCHPACK_POLLING=true
+    user: "${UID:-1000}:${GID:-1000}"
+    depends_on:
+      - backend
+  backend:
+    build:
+      context: ./my-backend
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./my-backend:/app
+      - /app/node_modules
+    user: "${UID:-1000}:${GID:-1000}"
